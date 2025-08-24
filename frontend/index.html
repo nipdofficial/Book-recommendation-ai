@@ -1,12 +1,285 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BookRec – IRWA Demo</title>
-  </head>
-  <body style="background:#0B1023;color:#E5E7EB;font-family:Inter,system-ui,Arial;">
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookRec - Agentic AI System | IRWA Project</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">📚</span>
+                    <h1>BookRec - Agentic AI System</h1>
+                </div>
+                <p class="subtitle">Information Retrieval & Web Analytics Project</p>
+                <div class="api-status">
+                    <span class="status-label">API Status:</span>
+                    <span class="status-indicator" id="apiStatus">Checking...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="navigation">
+            <div class="nav-container">
+                <button class="nav-tab active" data-tab="data-processing">
+                    <span class="tab-number">1</span>
+                    <span class="tab-title">Data Collection & Preprocessing</span>
+                    <span class="tab-subtitle">IR Concept - Data ingestion, cleaning, and preprocessing</span>
+                </button>
+                <button class="nav-tab" data-tab="genre-classification">
+                    <span class="tab-number">2</span>
+                    <span class="tab-title">Genre Classification</span>
+                    <span class="tab-subtitle">IR & NLP Concept - ML-based genre classification</span>
+                </button>
+                <button class="nav-tab" data-tab="popularity-analyzer">
+                    <span class="tab-number">3</span>
+                    <span class="tab-title">Popularity Analyzer</span>
+                    <span class="tab-subtitle">Web Analytics Concept - Popularity scoring and trends</span>
+                </button>
+                <button class="nav-tab" data-tab="suggestion-agent">
+                    <span class="tab-number">4</span>
+                    <span class="tab-title">Suggestion Agent</span>
+                    <span class="tab-subtitle">Hybrid IR + Web Analytics - Enhanced recommendations</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Data Processing Section -->
+            <section id="data-processing" class="content-section active">
+                <div class="section-header">
+                    <h2>📊 Data Collection & Preprocessing (IR Concept)</h2>
+                    <p>First step in information retrieval - collect, clean, and structure book data</p>
+                </div>
+                
+                <div class="data-overview">
+                    <h3>Dataset Overview</h3>
+                    <p>Our system uses a comprehensive book dataset with advanced preprocessing techniques including:</p>
+                    <ul class="feature-list">
+                        <li>📁 <strong>Data Ingestion:</strong> CSV parsing and validation</li>
+                        <li>🧹 <strong>Data Cleaning:</strong> Duplicate removal and standardization</li>
+                        <li>🏷️ <strong>Genre Standardization:</strong> ML-based genre classification</li>
+                        <li>📊 <strong>Quality Assessment:</strong> Data validation and statistics</li>
+                    </ul>
+                    
+                    <button class="load-data-btn" id="loadDataBtn">Load & Analyze Dataset</button>
+                </div>
+
+                <div class="results-section" id="dataResults" style="display: none;">
+                    <h3>Data Preprocessing Results</h3>
+                    <div class="data-stats">
+                        <div class="stat-card">
+                            <span class="stat-number" id="totalBooks">0</span>
+                            <span class="stat-label">Total Books</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="totalGenres">0</span>
+                            <span class="stat-label">Genres Found</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="avgRating">0.0</span>
+                            <span class="stat-label">Avg Rating</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="dataQuality">0%</span>
+                            <span class="stat-label">Data Quality Score</span>
+                        </div>
+                    </div>
+                    
+                    <div class="preprocessing-details">
+                        <h4>Preprocessing Details</h4>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Duplicates Removed:</span>
+                                <span class="detail-value" id="duplicatesRemoved">0</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Genres Standardized:</span>
+                                <span class="detail-value" id="genresStandardized">0</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Missing Values:</span>
+                                <span class="detail-value" id="missingValues">0</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Processing Time:</span>
+                                <span class="detail-value" id="processingTime">0ms</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sample-data">
+                        <h4>Sample Processed Books (First 5)</h4>
+                        <div class="books-grid" id="sampleBooks"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Genre Classification Section -->
+            <section id="genre-classification" class="content-section">
+                <div class="section-header">
+                    <h2>🏷️ Genre Classification (IR & NLP Concept)</h2>
+                    <p>ML-based genre classification using TF-IDF and advanced NLP techniques</p>
+                </div>
+                
+                <div class="classification-section">
+                    <h3>Classify Book Genre</h3>
+                    <div class="input-group">
+                        <label for="bookText">Book Description/Text:</label>
+                        <textarea id="bookText" placeholder="Enter book description, title, or text content for genre classification..." rows="4"></textarea>
+                        <button class="classify-btn" id="classifyBtn">Classify Genre</button>
+                    </div>
+                </div>
+
+                <div class="results-section" id="genreResults" style="display: none;">
+                    <h3>Classification Results</h3>
+                    <div class="genre-predictions" id="genrePredictions"></div>
+                </div>
+            </section>
+
+            <!-- Popularity Analyzer Section -->
+            <section id="popularity-analyzer" class="content-section">
+                <div class="section-header">
+                    <h2>📈 Popularity Analyzer (Web Analytics Concept)</h2>
+                    <p>Analyze book popularity using Bayesian scoring and trend analysis</p>
+                </div>
+                
+                <div class="popularity-section">
+                    <h3>Analyze Popularity</h3>
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label>Genre Filter:</label>
+                            <select id="popularityGenre">
+                                <option value="">All Genres</option>
+                                <option value="Fantasy">Fantasy</option>
+                                <option value="Science Fiction">Science Fiction</option>
+                                <option value="Mystery">Mystery</option>
+                                <option value="Romance">Romance</option>
+                                <option value="Thriller">Thriller</option>
+                                <option value="Nonfiction">Nonfiction</option>
+                                <option value="Historical">Historical</option>
+                                <option value="Young Adult">Young Adult</option>
+                                <option value="Horror">Horror</option>
+                                <option value="Self-Help">Self-Help</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Year Range:</label>
+                            <div class="year-range">
+                                <input type="number" id="yearFrom" min="1800" max="2024" value="1900">
+                                <span>to</span>
+                                <input type="number" id="yearTo" min="1800" max="2024" value="2024">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="analyze-btn" id="analyzeBtn">Analyze Popularity</button>
+                </div>
+
+                <div class="results-section" id="popularityResults" style="display: none;">
+                    <h3>Popularity Analysis Results</h3>
+                    <div class="popularity-stats" id="popularityStats"></div>
+                </div>
+            </section>
+
+            <!-- Suggestion Agent Section -->
+            <section id="suggestion-agent" class="content-section">
+                <div class="section-header">
+                    <h2>🤖 Suggestion Agent (Hybrid IR + Web Analytics)</h2>
+                    <p>Combines content-based filtering, popularity, and user feedback</p>
+                </div>
+                
+                <div class="recommendation-section">
+                    <h3>Get Recommendations</h3>
+                    <div class="input-group">
+                        <label for="queryText">Search Query:</label>
+                        <input type="text" id="queryText" placeholder="e.g., fast-paced sci-fi with found family themes">
+                        <button class="recommend-btn" id="recommendBtn">Get Recommendations</button>
+                    </div>
+                </div>
+
+                <div class="results-section" id="recommendationResults" style="display: none;">
+                    <h3>Enhanced Recommendations</h3>
+                    <div class="recommendations-grid" id="recommendationsGrid"></div>
+                </div>
+
+                <div class="feedback-section">
+                    <h3>User Feedback System</h3>
+                    <div class="feedback-form">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Book ID:</label>
+                                <input type="text" id="feedbackBookId" placeholder="Enter book ID">
+                            </div>
+                            <div class="input-group">
+                                <label>Rating:</label>
+                                <select id="feedbackRating">
+                                    <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                                    <option value="4">⭐⭐⭐⭐ (4)</option>
+                                    <option value="3">⭐⭐⭐ (3)</option>
+                                    <option value="2">⭐⭐ (2)</option>
+                                    <option value="1">⭐ (1)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Feedback:</label>
+                            <textarea id="feedbackText" placeholder="Share your thoughts about this book..." rows="3"></textarea>
+                        </div>
+                        <button class="feedback-btn" id="feedbackBtn">Submit Feedback</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Helpdesk Chatbot -->
+        <div class="chatbot-container" id="chatbot">
+            <div class="chatbot-toggle" id="chatbotToggle">
+                <span class="chatbot-icon">💬</span>
+                <span class="chatbot-label">Helpdesk</span>
+            </div>
+            <div class="chatbot-panel" id="chatbotPanel">
+                <div class="chatbot-header">
+                    <div class="chatbot-title">
+                        <span class="chatbot-icon-header">🆘</span>
+                        <div>
+                            <h3>IRWA Helpdesk</h3>
+                            <p>Get help with Information Retrieval & Web Analytics concepts</p>
+                        </div>
+                    </div>
+                    <button class="close-btn" id="closeChatbot">×</button>
+                </div>
+                
+                <div class="quick-help">
+                    <h4>Quick Help Topics</h4>
+                    <div class="help-topics">
+                        <button class="help-topic" data-topic="ir-concepts">📚 IR Concepts</button>
+                        <button class="help-topic" data-topic="web-analytics">📊 Web Analytics</button>
+                        <button class="help-topic" data-topic="ml-models">🤖 ML Models</button>
+                        <button class="help-topic" data-topic="system-help">🛠️ System Help</button>
+                    </div>
+                </div>
+                
+                <div class="chatbot-messages" id="chatbotMessages">
+                    <div class="message bot">
+                        <span class="message-text">Welcome to the IRWA Helpdesk! 🎓 I'm here to help you understand Information Retrieval & Web Analytics concepts. How can I assist you today?</span>
+                    </div>
+                </div>
+                
+                <div class="chatbot-input">
+                    <input type="text" id="chatbotInput" placeholder="Ask about IRWA concepts, ML models, or system features...">
+                    <button class="send-btn" id="sendMessage">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
 </html>

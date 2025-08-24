@@ -1,14 +1,54 @@
 export default function RecCard({ item }) {
-  const { title, genres, score, why } = item
+  const formatScore = (score) => (score * 100).toFixed(1)
+  
   return (
-    <div style={{background:'#11193A',border:'1px solid #1f2937',borderRadius:16,padding:16}}>
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-        <h3 style={{margin:0}}>{title}</h3>
-        <span style={{fontSize:12,padding:'4px 8px',borderRadius:12,background:'#4F46E5'}}>Score {score.toFixed(2)}</span>
+    <div className="rec-card">
+      <div className="rec-header">
+        <h4 className="rec-title">{item.title}</h4>
+        <div className="rec-score">
+          Score: {formatScore(item.score)}%
+        </div>
       </div>
-      <div style={{fontSize:12,opacity:0.8,marginTop:6}}>Genres: {genres.join(', ')}</div>
-      <div style={{fontSize:12,opacity:0.8,marginTop:6}}>
-        Why → sim {why.similarity.toFixed(2)} · pop {why.popularity.toFixed(2)} · genre {why.genre.toFixed(2)}
+      
+      <div className="rec-details">
+        <div className="rec-genres">
+          {item.genres.map((genre, idx) => (
+            <span key={idx} className="genre-tag">{genre}</span>
+          ))}
+        </div>
+        <div className="rec-year">{item.year}</div>
+      </div>
+      
+      <div className="rec-breakdown">
+        <h5>Recommendation Breakdown:</h5>
+        <div className="breakdown-grid">
+          <div className="breakdown-item">
+            <span className="breakdown-label">Similarity:</span>
+            <span className="breakdown-value similarity">
+              {formatScore(item.why.similarity)}%
+            </span>
+          </div>
+          <div className="breakdown-item">
+            <span className="breakdown-label">Popularity:</span>
+            <span className="breakdown-value popularity">
+              {formatScore(item.why.popularity)}%
+            </span>
+          </div>
+          <div className="breakdown-item">
+            <span className="breakdown-label">Genre Match:</span>
+            <span className="breakdown-value genre-match">
+              {formatScore(item.why.genre)}%
+            </span>
+          </div>
+          {item.why.feedback_boost && (
+            <div className="breakdown-item">
+              <span className="breakdown-label">Feedback Boost:</span>
+              <span className="breakdown-value feedback">
+                {formatScore(item.why.feedback_boost)}%
+              </span>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
