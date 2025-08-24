@@ -1,7 +1,31 @@
+# Node.js dependencies and build output
 frontend/node_modules/
 frontend/dist/
+
+# Python virtual environment
 backend/venv/
+
+# Python cache and compiled files
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Optional: ignore your main app file if you don't want it tracked
+# backend/app.py
+
+# OS generated files
 .DS_Store
 Thumbs.db
+
+# IDE/editor specific files (optional)
+.vscode/
+.idea/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Environment variables
+.env
