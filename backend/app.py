@@ -1,16 +1,27 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from models import RecommendRequest, ClassifyRequest, GenreClassificationRequest, PopularityAnalysisRequest, UserFeedbackRequest, DataPreprocessingRequest
-from ir_agents import load_books, BOOKS, recommend_by_query, classify_genres, analyze_popularity, add_user_feedback, get_user_feedback_insights, preprocess_data
+from ir_agents import (
+    load_books, BOOKS, recommend_by_query, classify_genres, analyze_popularity, 
+    add_user_feedback, get_user_feedback_insights, preprocess_data,
+    VEC, DOC_MATRIX, GENRE_CLASSIFIER, LABEL_ENCODER
+)
 import pandas as pd
 import io
 
-app = FastAPI(title="BookRec-AgenticAI (IRWA Demo)")
+app = FastAPI(
+    title="BookRec - Agentic AI System",
+    description="Information Retrieval & Web Analytics Project - Multi-agent AI-based Book Recommendation System",
+    version="2.0.0"
+)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000","http://localhost:5173"],
-    allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
+    allow_origins=["http://localhost:3000", "http://localhost:5173"],
+    allow_credentials=True, 
+    allow_methods=["*"], 
+    allow_headers=["*"]
 )
 
 @app.get("/")
@@ -64,10 +75,14 @@ async def function1_preprocess(file: UploadFile = File(...), config: DataPreproc
         "processed_count": len(df_processed),
         "books_loaded": len(BOOKS),
         "preprocessing_stats": {
+            "total_books": len(df_processed),
+            "unique_genres": len(set([genre for book in BOOKS for genre in book.get("genres", [])])),
+            "average_rating": df_processed["avg_rating"].mean() if "avg_rating" in df_processed.columns else 0,
             "duplicates_removed": len(df) - len(df_processed) if config and config.remove_duplicates else 0,
             "data_cleaned": config.clean_data if config else True,
             "genres_standardized": config.standardize_genres if config else True
-        }
+        },
+        "sample_books": BOOKS[:5] if BOOKS else []
     }
 
 @app.post("/function2/classify-genres")
@@ -76,7 +91,7 @@ def function2_classify_genres(req: GenreClassificationRequest):
     genres = classify_genres(req.text, top_k=req.top_k)
     return {
         "input_text": req.text,
-        "classified_genres": genres,
+        "genre_predictions": [{"genre": genre, "confidence": score} for genre, score in genres],
         "primary_genre": genres[0][0] if genres else "Unknown",
         "confidence_scores": {genre: score for genre, score in genres},
         "nlp_techniques_used": ["TF-IDF Vectorization", "Machine Learning Classification", "Rule-based Fallback"]
@@ -150,8 +165,8 @@ def system_status():
             "Enhanced Recommendation"
         ],
         "ir_components": {
-            "tfidf_vectorizer": VEC is not None,
-            "document_matrix": DOC_MATRIX is not None,
+            "tfidf_vectorizer": VEC is not None if 'VEC' in globals() else False,
+            "document_matrix": DOC_MATRIX is not None if 'DOC_MATRIX' in globals() else False,
             "genre_classifier": "ML-based + Rule-based fallback",
             "popularity_analyzer": "Bayesian scoring + Trend analysis"
         },

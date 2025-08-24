@@ -294,7 +294,15 @@ def recommend_by_query(query: str, top_k=8) -> List[Dict]:
     for i in idx:
         b = BOOKS[i]
         out.append({
-            "id": b["id"], "title": b["title"], "genres": b["genres"], "year": b["year"],
+            "id": b["id"], 
+            "title": b["title"], 
+            "author": b.get("author", "Unknown Author"),
+            "genres": b["genres"], 
+            "year": b["year"],
+            "rating": b.get("avg_rating", 0.0),
+            "similarity_score": float(sim[i]),
+            "popularity_score": float(pop[i]),
+            "genre_match_score": classify_match_score(query, b["genres"]),
             "score": float(blend[i]),
             "why": {"similarity": float(sim[i]), "popularity": float(pop[i]),
                      "genre": classify_match_score(query, b["genres"]),
@@ -303,5 +311,6 @@ def recommend_by_query(query: str, top_k=8) -> List[Dict]:
     return out
 
 def classify_match_score(query: str, book_genres: List[str]) -> float:
+    """Calculate genre match score between query and book genres"""
     preds = [g for g,_ in classify_genres(query, top_k=3)]
     return float(len(set(preds) & set(book_genres))) / max(1, len(set(book_genres)))
