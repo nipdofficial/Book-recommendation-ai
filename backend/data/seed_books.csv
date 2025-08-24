@@ -1,0 +1,11 @@
+id,title,summary,genres,year,avg_rating,ratings_count
+1,The Hobbit,"A hobbit embarks on a quest with dwarves and a wizard.","Fantasy;Adventure",1937,4.7,2500000
+2,Dune,"A young nobleman becomes a messianic figure on a desert planet.","Science Fiction;Adventure",1965,4.5,1800000
+3,Gone Girl,"A missing wife and unreliable narration drive a twisty investigation.","Thriller;Mystery",2012,4.1,1200000
+4,Pride and Prejudice,"A classic romance of manners and misunderstandings.","Romance;Classic",1813,4.6,3000000
+5,Project Hail Mary,"A lone astronaut must save Earth with the help of an alien ally.","Science Fiction;Thriller",2021,4.6,800000
+6,The Name of the Wind,"A gifted young man recounts his life at a university of magic.","Fantasy",2007,4.5,1100000
+7,The Martian,"An astronaut stranded on Mars uses science to survive.","Science Fiction",2011,4.4,2200000
+8,The Girl with the Dragon Tattoo,"A journalist and hacker uncover dark family secrets.","Mystery;Thriller",2005,4.2,1600000
+9,Atomic Habits,"A guide to building good habits and breaking bad ones.","Self-Help;Nonfiction",2018,4.4,2100000
+10,The Book Thief,"A young girl in Nazi Germany finds solace in books.","Historical;Young Adult",2005,4.4,1900000
